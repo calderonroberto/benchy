@@ -4,6 +4,7 @@
 
 * sinatra 1.4.*
 * rspec 3.3.*
+* ruby 2.2.*
 
 Install your depenedencies via:
 
