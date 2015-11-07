@@ -5,15 +5,15 @@ class Benchy
 
   def initialize(url)
     @url = url
-    @data = []
+    @transactions = []
   end
 
   def url()
     @url
   end
 
-  def data()
-    @data
+  def transactions()
+    @transactions
   end
 
 
@@ -23,7 +23,7 @@ class Benchy
 
     totalCount = i = 1
 
-    while @data.length < totalCount do
+    while @transactions.length < totalCount do
 
       res = Net::HTTP.get_response(URI(@url + i.to_s + '.json'))
 
@@ -33,7 +33,7 @@ class Benchy
 
       begin
         res_data = JSON.parse(res.body)
-        @data.concat(res_data['transactions'])
+        @transactions.concat(res_data['transactions'])
         totalCount = res_data['totalCount']
       rescue # deploy parachutes
         puts "Error getting data from the API, likely a JSON parse Error"
@@ -43,13 +43,23 @@ class Benchy
 
     end
 
-    @data #return data in case client needs it
+    @transactions #return transactions in case client needs it
 
   end
 
   # Let's compute our balance.
-
   def compute_balance
+
+    if @transactions.length == 0
+      return 0 #probably better to return nil
+    end
+
+    @transactions.each  do |t|
+
+    end
+
+
+  end
 
 
 end

@@ -13,18 +13,24 @@ describe Benchy do
     @benchy = Benchy.new("http://localhost/")
   end
 
-  it "has a data object" do
-    expect(@benchy.data).to be_instance_of(Array)
+  it "has a transactions object" do
+    expect(@benchy.transactions).to be_instance_of(Array)
   end
 
-  it "should download all the data" do
+  it "should download all the transactions" do
     # There's no time to mock up this, let's run it against
-    # the resttest api and assume the data is correct (38)
+    # the resttest api and assume the data is correct (38 items)
     @benchy.get_data
-    expect(@benchy.data.length).to eq 38
+    expect(@benchy.transactions.length).to eq 38
+  end
+
+  it "should not ocmpute balance on empty data" do
+    expect(@benchy.compute_balance).to eq(0)
   end
 
   it "should calculate the total balance" do
+    @benchy.get_data
+    #expect(@benchy.compute_balance).to eq () balance
   end
 
   it "should clean venddor names" do
