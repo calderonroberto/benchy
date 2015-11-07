@@ -1,7 +1,6 @@
 require 'rspec'
 require './benchy.rb'
 
-
 describe Benchy do
   before :each do
     #@benchy = Benchy.new("http://resttest.bench.co/transactions/")
@@ -25,11 +24,11 @@ describe Benchy do
   end
 
   it "should not ocmpute balance on empty data" do
-    expect(@benchy.compute_balance).to eq 0
+    expect(@benchy.compute_balance).to eq 0.0
   end
 
   it "should calculate the total balance" do
-    @benchy.transactions [{"Amount"=>"-300.2"}, {"Amount"=>"300.2"}, {"Amount"=>"200.1"}]
+    @benchy.transactions [{:Amount => -300.2}, {:Amount => 300.2}, {:Amount => 200.1}]
     expect(@benchy.compute_balance).to eq 200.1
   end
 
@@ -38,24 +37,55 @@ describe Benchy do
     expect(@benchy.compute_balance).to eq 20262.81
   end
 
-  it "should clean venddor names" do
+  it "should clean vendor names" do
     [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
        @benchy.add_transaction t
     end
-    expect(@benchy.transactions).to eq [{"Company"=>"NESTERS MARKET VANCOUVER BC"}, {"Company"=>"DROPBOX"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}]
+    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Payment", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
   end
 
   it "should not have duplicate transactions" do
     [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
        @benchy.add_transaction t
     end
-    expect(@benchy.transactions).to eq [{"Company"=>"NESTERS MARKET VANCOUVER BC"}, {"Company"=>"DROPBOX"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}]
+    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Payment", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
   end
 
   it "should have a list of categories, with a list of transactions, and total expenses for that category" do
+    @benchy.transactions [{"Ledger": "Phone & Internet Expense","Amount": "-10",}, {"Ledger": "Business Meals & Entertainment Expense","Amount": "-10",}, {"Ledger": "Business Meals & Entertainment Expense","Amount": "-20",}]
+    expect(@benchy.get_category_expenses).to equal(
+      [{
+        "category": "Phone & Internet Expense",
+        "totalExpenses": "-10",
+        "transactions": [
+          {
+              "Ledger": "Phone & Internet Expense",
+              "Amount": "-10",
+          }
+        ]
+      },
+      {
+        "category": "Business Meals & Entertainment Expense",
+        "totalExpenses": "-30",
+        "transactions": [
+          {
+              "Ledger": "Business Meals & Entertainment Expense",
+              "Amount": "-20",
+          },
+          {
+            "Ledger": "Business Meals & Entertainment Expense",
+            "Amount": "-10",
+          }
+        ]
+      }]
+    )
+
   end
 
   it "should have a list of daily calculated balances. (With rolling balances)" do
+    @benchy.get_data
   end
+
+
 
 end

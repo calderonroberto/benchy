@@ -1,5 +1,6 @@
 require 'net/http'
 require 'json'
+require 'date'
 
 class Benchy
 
@@ -24,14 +25,21 @@ class Benchy
 
 
   ##
-  ## A method to add transactions with pre-processing like string
-  ## cleaning and duplicate checks. This way we minimize the time cost
+  ## A method to add transactions, while pre-processing it to appropriate
+  ## types, cleaning strings and checking for duplicates.
   ##
-
+  ## In reality parse Dates like: Date.strptime(t["Date"], '%Y-%m-%d')
+  ## however, since it's Y-M-D sorting is straightforward.
+  ##
   def add_transaction(t)
-    t['Company'] = clean_string t['Company']
-    unless @transactions.include? t
-      @transactions.push t
+    clean_t = {
+      "Date": t["Date"] || nil,
+      "Ledger": t["Ledger"] || "Payment",
+      "Company": clean_string(t["Company"]) || "",
+      "Amount": t["Amount"].to_f || 0
+    }
+    unless @transactions.include? clean_t
+     @transactions.push clean_t
     end
   end
 
@@ -41,33 +49,25 @@ class Benchy
   ##
 
   def get_data
-
     totalCount = i = 1
-
+    @transactions = [] # clean object's transactions
     while @transactions.length < totalCount do
-
       res = Net::HTTP.get_response(URI(@url + i.to_s + '.json'))
-
       if res.code != '200' # safety first.
         break
       end
-
       begin
         res_data = JSON.parse(res.body)
-        res_data['transactions'].each do |t|
-          add_transaction t
-        end
-        totalCount = res_data['totalCount']
       rescue # deploy parachutes
         puts "Error getting data from the API, likely a JSON parse Error"
       end
-
+      totalCount = res_data['totalCount']
+      res_data['transactions'].each do |t|
+        add_transaction t
+      end
       i+=1
-
     end
-
     @transactions #return transactions in case client needs it
-
   end
 
   ##
@@ -75,19 +75,14 @@ class Benchy
   ##
 
   def compute_balance
-
-    balance = 0
-
-    if @transactions.length == 0
+    balance = 0.0
+    if @transactions.length == 0.0
       return balance #probably better to return nil
     end
-
     @transactions.each  do |t|
-      balance += t['Amount'].to_f
+      balance += t[:Amount]
     end
-
     balance
-
   end
 
   private
@@ -100,6 +95,7 @@ class Benchy
   ##    digits and periods
   ##    the characters, and words: USD, CA, @
   ##
+  # TODO: add other cases
   def clean_string (string)
     return string.gsub(/\s(#|x)\w+|\d|\.|\s\d|\s(USD|CA|@)/, "")
   end
