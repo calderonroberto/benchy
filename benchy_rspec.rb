@@ -65,7 +65,14 @@ describe Benchy do
   end
 
   it "should have a list of daily calculated balances. (With rolling balances)" do
-    @benchy.get_data
+    [{"Date"=>"2013-12-13", "Ledger"=> "Insurance Expense", "Amount"=> "-117.81", "Company"=> "LONDON DRUGS 78 POSTAL VANCOUVER BC"},{"Date"=> "2013-12-13", "Ledger"=> "Equipment Expense", "Amount"=> "-520.85", "Company"=> "ECHOSIGN xxxxxxxx6744 CA xx8.80 USD @ xx0878"},{"Date"=> "2013-12-14", "Ledger"=> "Equipment Expense", "Amount"=> "-5518.17","Company"=> "APPLE STORE #R280 VANCOUVER BC"}].each do |t|
+      @benchy.add_transaction t
+    end
+
+    expect(@benchy.get_daily_balances).to eq(
+      {:date => "2013-12-13", :balance => -638.66},
+      {:date => "2013-12-14", :balance => -6156.83},
+    )
   end
 
 
