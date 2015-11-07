@@ -32,7 +32,6 @@ class Benchy
   ## however, since it's Y-M-D sorting is straightforward.
   ##
   def add_transaction(t)
-    puts t["Ledger"]
     clean_t = {
       "Date": t["Date"] || nil,
       "Ledger": safe_ledger(t["Ledger"]),
