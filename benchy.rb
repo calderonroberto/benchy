@@ -75,14 +75,11 @@ class Benchy
   ##
 
   def compute_balance
-    balance = 0.0
     if @transactions.length == 0.0
-      return balance #probably better to return nil
+      return 0.0 #probably better to return nil
     end
-    @transactions.each  do |t|
-      balance += t[:Amount]
-    end
-    balance
+    balance = @transactions.reduce(0.0){|balance, t| balance + t[:Amount]}
+    safe_float balance #ensure two decimals
   end
 
   ##
@@ -101,6 +98,8 @@ class Benchy
       categories[t[:Ledger]][:transactions].push t
       categories[t[:Ledger]][:totalExpenses] += t[:Amount]
     end
+
+    # Done, but let's create an array:
     categories_list = []
     categories.each do |k,v|
       categories_list.push({:category => k, :transactions => v[:transactions], :totalExpenses => v[:totalExpenses]})
@@ -108,6 +107,22 @@ class Benchy
     categories_list
   end
 
+  ##
+  ## Get Daily Rolling Balances.
+  ##
+
+  def get_daily_balances
+    sorted_transactions = @transactions.sort_by { |k| k[:Date] }
+    daily_balances  = []
+    balance = 0.00
+    sorted_transactions.each_with_index do |t,i|
+      balance += t[:Amount]
+      if i == sorted_transactions.length-1 || t[:Date] != sorted_transactions[i+1][:Date]
+        daily_balances << {:date => t[:Date], :balance => safe_float(balance)}
+      end
+    end
+    daily_balances
+  end
 
   private
 
@@ -119,9 +134,14 @@ class Benchy
   ##    digits and periods
   ##    the characters, and words: USD, CA, @
   ##
-  # TODO: add other cases
   def clean_string (string)
     return string.gsub(/\s(#|x)\w+|\d|\.|\s\d|\s(USD|CA|@)/, "")
+  end
+
+  ## Let's keep the consistency with the API. Due to implementation
+  ## in ruby, float operations might return trailing zeros or decimals
+  def safe_float (num)
+    return num.round(2)
   end
 
 end
