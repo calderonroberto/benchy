@@ -58,7 +58,7 @@ class Benchy
       end
       begin
         res_data = JSON.parse(res.body)
-      rescue # deploy parachutes
+      rescue # deploy parachutes API is misbehaving
         puts "Error getting data from the API, likely a JSON parse Error"
       end
       totalCount = res_data['totalCount']
@@ -75,8 +75,8 @@ class Benchy
   ##
 
   def compute_balance
-    if @transactions.length == 0.0
-      return 0.0 #probably better to return nil
+    if @transactions.length == 0
+      return 0.0
     end
     balance = @transactions.reduce(0.0){|balance, t| balance + t[:Amount]}
     safe_float balance #ensure two decimals
@@ -112,12 +112,11 @@ class Benchy
   ##
 
   def get_daily_balances
-    sorted_transactions = @transactions.sort_by { |k| k[:Date] }
     daily_balances  = []
     balance = 0.00
-    sorted_transactions.each_with_index do |t,i|
+    @transactions.sort_by! { |k| k[:Date] }.each_with_index do |t,i|
       balance += t[:Amount]
-      if i == sorted_transactions.length-1 || t[:Date] != sorted_transactions[i+1][:Date]
+      if i == @transactions.length-1 || t[:Date] != @transactions[i+1][:Date]
         daily_balances << {:date => t[:Date], :balance => safe_float(balance)}
       end
     end

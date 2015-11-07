@@ -4,12 +4,11 @@ require './benchy.rb'
 describe Benchy do
   before :each do
     #@benchy = Benchy.new("http://resttest.bench.co/transactions/")
-    @benchy = Benchy.new("http://localhost/")
+    @benchy = Benchy.new("http://localhost/") # local testing
   end
 
   it "has a URI" do
-    #expect(@benchy.url).to eq "http://resttest.bench.co/transactions/"
-    @benchy = Benchy.new("http://localhost/")
+    expect(@benchy.url).to eq "http://resttest.bench.co/transactions/"
   end
 
   it "has a transactions object" do
