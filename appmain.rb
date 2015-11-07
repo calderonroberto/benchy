@@ -6,6 +6,10 @@ require 'json'
 #set :benchy, Benchy.new("http://resttest.bench.co/transactions/")
 set :benchy, Benchy.new("http://localhost/")
 
+get '/' do
+  File.read(File.join('public', 'index.html'))
+end
+
 get '/transactions' do
   benchy = settings.benchy
   benchy.get_data
@@ -21,7 +25,6 @@ get '/balance' do
   content_type :json
   {:balance => benchy.compute_balance}.to_json
 end
-
 
 get '/categories' do
   benchy = settings.benchy

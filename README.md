@@ -1,5 +1,12 @@
 # Benchy
 
+## Files
+
+* **benchy_rspec.rb** Because tests should come first.
+* **benchy.rb** The main library, and what you came here for.
+* **appmain.rb** A simple Sinatra application.
+* **public** Where all assets live.
+
 ## Dependencies
 
 * sinatra 1.4.*
@@ -22,20 +29,10 @@ ruby appmain.rb
 
 And visiting http://localhost:4567/
 
-
-
 ## Running Tests
 
-To run the tests run:
+Run the tests using:
 
 ```
 rspec benchy_rspec.rb
 ```
-
-
-## Files
-
-* **benchy_rspec.rb** Because tests should come first.
-* **benchy.rb** The main library, and what you came here for.
-* **appmain.rb** A simple Sinatra application.
-* **public** Where all assets live.
