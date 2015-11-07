@@ -50,7 +50,7 @@ class Benchy
 
   def get_data
     totalCount = i = 1
-    @transactions = [] # clean object's transactions
+    @transactions = [] # ensure this object uses only up-to-date data
     while @transactions.length < totalCount do
       res = Net::HTTP.get_response(URI(@url + i.to_s + '.json'))
       if res.code != '200' # safety first.
@@ -84,6 +84,30 @@ class Benchy
     end
     balance
   end
+
+  ##
+  ## Get categories.
+  ## We will use a hash for optimal performance.
+  ## Returining this hash would probably be the best choice too,
+  ## however, specs say "list", so we create an array at the end.
+  ##
+
+  def get_category_expenses
+    categories = {}
+    @transactions.each  do |t|
+      unless categories.has_key?(t[:Ledger])
+        categories[t[:Ledger]] = {:transactions=>[], :totalExpenses=>0.0}
+      end
+      categories[t[:Ledger]][:transactions].push t
+      categories[t[:Ledger]][:totalExpenses] += t[:Amount]
+    end
+    categories_list = []
+    categories.each do |k,v|
+      categories_list.push({:category => k, :transactions => v[:transactions], :totalExpenses => v[:totalExpenses]})
+    end
+    categories_list
+  end
+
 
   private
 

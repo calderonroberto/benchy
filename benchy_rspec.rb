@@ -52,34 +52,16 @@ describe Benchy do
   end
 
   it "should have a list of categories, with a list of transactions, and total expenses for that category" do
-    @benchy.transactions [{"Ledger": "Phone & Internet Expense","Amount": "-10",}, {"Ledger": "Business Meals & Entertainment Expense","Amount": "-10",}, {"Ledger": "Business Meals & Entertainment Expense","Amount": "-20",}]
-    expect(@benchy.get_category_expenses).to equal(
-      [{
-        "category": "Phone & Internet Expense",
-        "totalExpenses": "-10",
-        "transactions": [
-          {
-              "Ledger": "Phone & Internet Expense",
-              "Amount": "-10",
-          }
-        ]
-      },
-      {
-        "category": "Business Meals & Entertainment Expense",
-        "totalExpenses": "-30",
-        "transactions": [
-          {
-              "Ledger": "Business Meals & Entertainment Expense",
-              "Amount": "-20",
-          },
-          {
-            "Ledger": "Business Meals & Entertainment Expense",
-            "Amount": "-10",
-          }
-        ]
-      }]
-    )
 
+    [{"Date"=>"2013-12-13", "Ledger"=> "Insurance Expense", "Amount"=> "-117.81", "Company"=> "LONDON DRUGS 78 POSTAL VANCOUVER BC"},{"Date"=> "2013-12-13", "Ledger"=> "Equipment Expense", "Amount"=> "-520.85", "Company"=> "ECHOSIGN xxxxxxxx6744 CA xx8.80 USD @ xx0878"},{"Date"=> "2013-12-13", "Ledger"=> "Equipment Expense", "Amount"=> "-5518.17","Company"=> "APPLE STORE #R280 VANCOUVER BC"}].each do |t|
+      @benchy.add_transaction t
+    end
+
+    expect(@benchy.get_category_expenses).to eq(
+      [{:category => "Insurance Expense", :transactions => [{:Date => "2013-12-13", :Ledger => "Insurance Expense", :Company => "LONDON DRUGS POSTAL VANCOUVER BC", :Amount => -117.81}], :totalExpenses => -117.81},
+      {:category => "Equipment Expense", :transactions => [{:Date => "2013-12-13", :Ledger => "Equipment Expense", :Company => "ECHOSIGN", :Amount => -520.85}, {:Date => "2013-12-13", :Ledger => "Equipment Expense", :Company => "APPLE STORE VANCOUVER BC", :Amount => -5518.17}], :totalExpenses => -6039.02}
+      ]
+    )
   end
 
   it "should have a list of daily calculated balances. (With rolling balances)" do
