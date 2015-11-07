@@ -29,9 +29,10 @@ class Benchy
   ##
 
   def add_transaction(t)
-    #TODO clean up strings and duplicates
     t['Company'] = clean_string t['Company']
-    @transactions.push t
+    unless @transactions.include? t
+      @transactions.push t
+    end
   end
 
   ##
@@ -102,6 +103,5 @@ class Benchy
   def clean_string (string)
     return string.gsub(/\s(#|x)\w+|\d|\.|\s\d|\s(USD|CA|@)/, "")
   end
-
 
 end

@@ -21,7 +21,7 @@ describe Benchy do
     # There's no time to mock up this, let's run it against
     # the resttest api and assume the data is correct (38 items)
     @benchy.get_data
-    expect(@benchy.transactions.length).to eq 38
+    expect(@benchy.transactions.length).to eq 36 #
   end
 
   it "should not ocmpute balance on empty data" do
@@ -35,7 +35,7 @@ describe Benchy do
 
   it "should calculate the total balance on bench data" do
     @benchy.get_data
-    expect(@benchy.compute_balance).to eq 18377.16
+    expect(@benchy.compute_balance).to eq 20262.81
   end
 
   it "should clean venddor names" do
@@ -46,6 +46,10 @@ describe Benchy do
   end
 
   it "should not have duplicate transactions" do
+    [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
+       @benchy.add_transaction t
+    end
+    expect(@benchy.transactions).to eq [{"Company"=>"NESTERS MARKET VANCOUVER BC"}, {"Company"=>"DROPBOX"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}]
   end
 
   it "should have a list of categories, with a list of transactions, and total expenses for that category" do
