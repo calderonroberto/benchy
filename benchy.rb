@@ -32,11 +32,12 @@ class Benchy
   ## however, since it's Y-M-D sorting is straightforward.
   ##
   def add_transaction(t)
+    puts t["Ledger"]
     clean_t = {
       "Date": t["Date"] || nil,
-      "Ledger": t["Ledger"] || "Payment",
-      "Company": clean_string(t["Company"]) || "",
-      "Amount": t["Amount"].to_f || 0
+      "Ledger": safe_ledger(t["Ledger"]),
+      "Company": clean_string(t["Company"]),
+      "Amount": t["Amount"].to_f || 0.0
     }
     unless @transactions.include? clean_t
      @transactions.push clean_t
@@ -135,6 +136,18 @@ class Benchy
   ##
   def clean_string (string)
     return string.gsub(/\s(#|x)\w+|\d|\.|\s\d|\s(USD|CA|@)/, "")
+  end
+
+
+  ##
+  ## Let's deal with empty ledger strings. It seems in the API they are
+  ## payments received, but let's solve for other cases too, and be general.
+  def safe_ledger (string)
+    if string.nil? || string.empty?
+      return "Unknown"
+    else
+      return string
+    end
   end
 
   ## Let's keep the consistency with the API. Due to implementation

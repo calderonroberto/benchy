@@ -40,14 +40,14 @@ describe Benchy do
     [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
        @benchy.add_transaction t
     end
-    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Payment", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
+    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Unknown", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
   end
 
   it "should not have duplicate transactions" do
     [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
        @benchy.add_transaction t
     end
-    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Payment", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Payment", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
+    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Unknown", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
   end
 
   it "should have a list of categories, with a list of transactions, and total expenses for that category" do
