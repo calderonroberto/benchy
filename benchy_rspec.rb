@@ -29,8 +29,13 @@ describe Benchy do
   end
 
   it "should calculate the total balance" do
+    @benchy.transactions [{"Amount"=>"-300.2"}, {"Amount"=>"300.2"}, {"Amount"=>"200.1"}]
+    expect(@benchy.compute_balance).to eq 200.1
+  end
+
+  it "should calculate the total balance on bench data" do
     @benchy.get_data
-    #expect(@benchy.compute_balance).to eq () balance
+    expect(@benchy.compute_balance).to eq (18377.16)
   end
 
   it "should clean venddor names" do

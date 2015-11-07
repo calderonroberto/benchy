@@ -8,17 +8,20 @@ class Benchy
     @transactions = []
   end
 
-  def url()
+  def url(url=nil)
+    @url = url if url
     @url
   end
 
-  def transactions()
+  def transactions(tns=nil)
+    @transactions = tns if tns
     @transactions
   end
 
 
   ## Let's assume we want all the data.This function will paginate
-  # until we load all the transactions specified by the API response.
+  ## until we load all the transactions specified by the API response.
+
   def get_data()
 
     totalCount = i = 1
@@ -47,17 +50,21 @@ class Benchy
 
   end
 
-  # Let's compute our balance.
+  ## Method to compute the balance.
+
   def compute_balance
 
+    balance = 0
+
     if @transactions.length == 0
-      return 0 #probably better to return nil
+      return balance #probably better to return nil
     end
 
     @transactions.each  do |t|
-
+      balance += t['Amount'].to_f
     end
 
+    balance
 
   end
 
