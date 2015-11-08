@@ -2,10 +2,19 @@
 
 ## Files
 
-* **benchy_rspec.rb** Because tests should come first.
-* **benchy.rb** The main library, and what you came here for.
-* **appmain.rb** A simple Sinatra application.
-* **public** Where all assets live.
+* **benchy.rb** The main library using resttest.bench.co, and what you came here for.
+
+* **appmain.rb** A simple Sinatra application with benchy's API.
+* **public** Where the front-end lives. Not much to see here.
+* **benchy_rspec.rb** Because what's the point of life without tests.
+* **config.ru** Script to run the app from Passenger.
+
+
+## Live App
+
+You can visit the Benchy app at [http://robertocalderon.ca/benchy](http://robertocalderon.ca/benchy)
+
+![Image](https://raw.githubusercontent.com/calderonroberto/benchy/master/screenshot.gif)
 
 ## Dependencies
 
