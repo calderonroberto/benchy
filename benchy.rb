@@ -103,7 +103,7 @@ class Benchy
     # Done, but let's create an array:
     categories_list = []
     categories.each do |k,v|
-      categories_list.push({:category => k, :transactions => v[:transactions], :totalExpenses => v[:totalExpenses]})
+      categories_list.push({:category => k, :transactions => v[:transactions], :totalExpenses => safe_float(v[:totalExpenses])})
     end
     categories_list
   end
