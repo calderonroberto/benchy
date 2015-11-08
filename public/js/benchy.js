@@ -41,7 +41,7 @@ $( document ).ready(function() {
   ).done(function(data){
     for ( var i in data) {
       if (data.hasOwnProperty(i)) {
-        $('#transactions').append('<tr><td>'+data[i].date+'<td><td>'+data[i].ledger+'<td><td>'+data[i].company+'<td></tr>');
+        $('#transactions').append('<tr><td>'+data[i].date+'<td><td>'+data[i].ledger+'<td><td>'+data[i].company+'<td><td>'+data[i].amount+'<td></tr>');
       }
     }
   });
@@ -55,7 +55,7 @@ $( document ).ready(function() {
         categoryTables += '<div class="panel panel-default"><div class="panel-heading">'+data[i].category+'</div><table class="table"><caption>Total Balance: '+data[i].totalExpenses+'</caption';
         for (var j in data[i].transactions) {
           if (data[i].transactions.hasOwnProperty(j)){
-            categoryTables +=  '<tr><td>'+data[i].transactions[j].date+'</td><td>'+data[i].transactions[j].ledger+'</td><td>'+data[i].transactions[j].company+'</td><tr>';
+            categoryTables +=  '<tr><td>'+data[i].transactions[j].date+'</td><td>'+data[i].transactions[j].company+'</td><td>'+data[i].transactions[j].amount+'<td><tr>';
           }
         }
         categoryTables += '</table></div>';

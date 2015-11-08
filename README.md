@@ -8,7 +8,6 @@
 * **benchy_rspec.rb** Because what's the point of life without tests.
 * **config.ru** Script to run the app from Passenger.
 
-
 ## Live App
 
 You can visit the Benchy app at [http://robertocalderon.ca/benchy](http://robertocalderon.ca/benchy)
