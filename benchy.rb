@@ -133,10 +133,10 @@ class Benchy
   ## it will test for :
   ##    words beginning with: #, x
   ##    digits and periods
-  ##    the characters, and words: USD, CA, @
+  ##    the characters, and words: USD, CAD, @
   ##
   def clean_string (string)
-    return string.gsub(/\s(#|x)\w+|\d|\.|\s\d|\s(USD|CA|@)/, "")
+    return string.gsub(/\s(#|x)\w+|\d|\.|\s\d|\s(USD|CAD|@)/, "")
   end
 
 
