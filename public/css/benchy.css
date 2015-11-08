@@ -13,3 +13,14 @@
     padding: 5pt;
     height: 100%;
 }
+
+#benchimage{
+    position:absolute;
+    top:0px;
+    right:60px;
+}
+
+#benchimage img {
+  width:60px;
+  height: 60px;
+}
