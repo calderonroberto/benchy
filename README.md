@@ -3,7 +3,6 @@
 ## Files
 
 * **benchy.rb** The main library using resttest.bench.co, and what you came here for.
-
 * **appmain.rb** A simple Sinatra application with benchy's API.
 * **public** Where the front-end lives. Not much to see here.
 * **benchy_rspec.rb** Because what's the point of life without tests.
