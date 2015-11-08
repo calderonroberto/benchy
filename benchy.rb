@@ -68,7 +68,7 @@ class Benchy
       end
       i+=1
     end
-    @transactions #return transactions in case client needs it
+    @transactions.sort_by! { |k| k[:date] } #return transactions in case client needs it, let's sort it too ;)
   end
 
   ##
@@ -115,6 +115,7 @@ class Benchy
   def get_daily_balances
     daily_balances  = []
     balance = 0.00
+    #ensure it's sorted first
     @transactions.sort_by! { |k| k[:date] }.each_with_index do |t,i|
       balance += t[:amount]
       if i == @transactions.length-1 || t[:date] != @transactions[i+1][:date]
