@@ -34,10 +34,10 @@ class Benchy
   ##
   def add_transaction(t)
     clean_t = {
-      "date": t["Date"] || nil,
-      "ledger": safe_ledger(t["Ledger"]),
-      "company": clean_string(t["Company"]),
-      "amount": t["Amount"].to_f || 0.0
+      :date => t["Date"] || nil,
+      :ledger => safe_ledger(t["Ledger"]),
+      :company => clean_string(t["Company"]),
+      :amount => t["Amount"].to_f || 0.0
     }
     unless @transactions.include? clean_t
      @transactions.push clean_t
