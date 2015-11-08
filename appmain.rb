@@ -3,8 +3,7 @@ require 'sinatra'
 require './benchy'
 require 'json'
 
-#set :benchy, Benchy.new("http://resttest.bench.co/transactions/")
-set :benchy, Benchy.new("http://localhost/")
+set :benchy, Benchy.new("http://resttest.bench.co/transactions/")
 
 get '/' do
   File.read(File.join('public', 'index.html'))
