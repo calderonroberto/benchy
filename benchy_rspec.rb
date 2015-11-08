@@ -1,6 +1,8 @@
 require 'rspec'
 require './benchy.rb'
 
+
+
 describe Benchy do
   before :each do
     #@benchy = Benchy.new("http://resttest.bench.co/transactions/")
@@ -27,7 +29,7 @@ describe Benchy do
   end
 
   it "should calculate the total balance" do
-    @benchy.transactions [{:Amount => -300.2}, {:Amount => 300.2}, {:Amount => 200.1}]
+    @benchy.transactions [{:amount => -300.2}, {:amount => 300.2}, {:amount => 200.1}]
     expect(@benchy.compute_balance).to eq 200.1
   end
 
@@ -40,25 +42,24 @@ describe Benchy do
     [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
        @benchy.add_transaction t
     end
-    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Unknown", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
+    expect(@benchy.transactions).to eq [{:date=>nil, :ledger=>"Unknown", :company=>"NESTERS MARKET VANCOUVER BC", :amount=>0.0}, {:date=>nil, :ledger=>"Unknown", :company=>"DROPBOX", :amount=>0.0}, {:date=>nil, :ledger=>"Unknown", :company=>"COMMODORE LANES & BILL VANCOUVER BC", :amount=>0.0}]
   end
 
   it "should not have duplicate transactions" do
     [{"Company"=>"NESTERS MARKET #x0064 VANCOUVER BC"}, {"Company"=>"DROPBOX xxxxxx8396 CA 9.99 USD @ xx1001"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}, {"Company"=>"COMMODORE LANES & BILL VANCOUVER BC"}].each do |t|
        @benchy.add_transaction t
     end
-    expect(@benchy.transactions).to eq [{:Date=>nil, :Ledger=>"Unknown", :Company=>"NESTERS MARKET VANCOUVER BC", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"DROPBOX", :Amount=>0.0}, {:Date=>nil, :Ledger=>"Unknown", :Company=>"COMMODORE LANES & BILL VANCOUVER BC", :Amount=>0.0}]
+    expect(@benchy.transactions).to eq [{:date=>nil, :ledger=>"Unknown", :company=>"NESTERS MARKET VANCOUVER BC", :amount=>0.0}, {:date=>nil, :ledger=>"Unknown", :company=>"DROPBOX", :amount=>0.0}, {:date=>nil, :ledger=>"Unknown", :company=>"COMMODORE LANES & BILL VANCOUVER BC", :amount=>0.0}]
   end
 
   it "should have a list of categories, with a list of transactions, and total expenses for that category" do
-
     [{"Date"=>"2013-12-13", "Ledger"=> "Insurance Expense", "Amount"=> "-117.81", "Company"=> "LONDON DRUGS 78 POSTAL VANCOUVER BC"},{"Date"=> "2013-12-13", "Ledger"=> "Equipment Expense", "Amount"=> "-520.85", "Company"=> "ECHOSIGN xxxxxxxx6744 CA xx8.80 USD @ xx0878"},{"Date"=> "2013-12-13", "Ledger"=> "Equipment Expense", "Amount"=> "-5518.17","Company"=> "APPLE STORE #R280 VANCOUVER BC"}].each do |t|
       @benchy.add_transaction t
     end
 
     expect(@benchy.get_category_expenses).to eq(
-      [{:category => "Insurance Expense", :transactions => [{:Date => "2013-12-13", :Ledger => "Insurance Expense", :Company => "LONDON DRUGS POSTAL VANCOUVER BC", :Amount => -117.81}], :totalExpenses => -117.81},
-      {:category => "Equipment Expense", :transactions => [{:Date => "2013-12-13", :Ledger => "Equipment Expense", :Company => "ECHOSIGN", :Amount => -520.85}, {:Date => "2013-12-13", :Ledger => "Equipment Expense", :Company => "APPLE STORE VANCOUVER BC", :Amount => -5518.17}], :totalExpenses => -6039.02}
+      [{:category => "Insurance Expense", :transactions => [{:date => "2013-12-13", :ledger => "Insurance Expense", :company => "LONDON DRUGS POSTAL VANCOUVER BC", :amount => -117.81}], :totalExpenses => -117.81},
+      {:category => "Equipment Expense", :transactions => [{:date => "2013-12-13", :ledger => "Equipment Expense", :company => "ECHOSIGN", :amount => -520.85}, {:date => "2013-12-13", :ledger => "Equipment Expense", :company => "APPLE STORE VANCOUVER BC", :amount => -5518.17}], :totalExpenses => -6039.02}
       ]
     )
   end

@@ -26,17 +26,18 @@ class Benchy
 
   ##
   ## A method to add transactions, while pre-processing it to appropriate
-  ## types, cleaning strings and checking for duplicates.
+  ## types, cleaning strings and checking for duplicates. Also, JSON properties
+  ## should be lowercased.
   ##
   ## In reality parse Dates like: Date.strptime(t["Date"], '%Y-%m-%d')
   ## however, since it's Y-M-D sorting is straightforward.
   ##
   def add_transaction(t)
     clean_t = {
-      "Date": t["Date"] || nil,
-      "Ledger": safe_ledger(t["Ledger"]),
-      "Company": clean_string(t["Company"]),
-      "Amount": t["Amount"].to_f || 0.0
+      "date": t["Date"] || nil,
+      "ledger": safe_ledger(t["Ledger"]),
+      "company": clean_string(t["Company"]),
+      "amount": t["Amount"].to_f || 0.0
     }
     unless @transactions.include? clean_t
      @transactions.push clean_t
@@ -78,7 +79,7 @@ class Benchy
     if @transactions.length == 0
       return 0.0
     end
-    balance = @transactions.reduce(0.0){|balance, t| balance + t[:Amount]}
+    balance = @transactions.reduce(0.0){|balance, t| balance + t[:amount]}
     safe_float balance #ensure two decimals
   end
 
@@ -92,11 +93,11 @@ class Benchy
   def get_category_expenses
     categories = {}
     @transactions.each  do |t|
-      unless categories.has_key?(t[:Ledger])
-        categories[t[:Ledger]] = {:transactions=>[], :totalExpenses=>0.0}
+      unless categories.has_key?(t[:ledger])
+        categories[t[:ledger]] = {:transactions=>[], :totalExpenses=>0.0}
       end
-      categories[t[:Ledger]][:transactions].push t
-      categories[t[:Ledger]][:totalExpenses] += t[:Amount]
+      categories[t[:ledger]][:transactions].push t
+      categories[t[:ledger]][:totalExpenses] += t[:amount]
     end
 
     # Done, but let's create an array:
@@ -114,10 +115,10 @@ class Benchy
   def get_daily_balances
     daily_balances  = []
     balance = 0.00
-    @transactions.sort_by! { |k| k[:Date] }.each_with_index do |t,i|
-      balance += t[:Amount]
-      if i == @transactions.length-1 || t[:Date] != @transactions[i+1][:Date]
-        daily_balances << {:date => t[:Date], :balance => safe_float(balance)}
+    @transactions.sort_by! { |k| k[:date] }.each_with_index do |t,i|
+      balance += t[:amount]
+      if i == @transactions.length-1 || t[:date] != @transactions[i+1][:date]
+        daily_balances << {:date => t[:date], :balance => safe_float(balance)}
       end
     end
     daily_balances
