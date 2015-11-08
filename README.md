@@ -20,7 +20,7 @@ You can visit the Benchy app at [http://robertocalderon.ca/benchy](http://robert
 * rspec 3.3.*
 * ruby 2.2.*
 
-Install your depenedencies via:
+Install your dependencies via:
 
 ```
 gem install sinatra rspec
